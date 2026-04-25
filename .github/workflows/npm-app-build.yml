@@ -55,13 +55,13 @@ jobs:
         id: ci-init
         uses: ./.github/actions/npm-ci
         with:
-          target: ${{ github.event.inputs.target }}
-          node-version: ${{ github.event.inputs.node-version }}
-          npm-install-command: ${{ github.event.inputs.npm-install-command }}
-          skip-test: ${{ github.event.inputs.skip-test }}
-          npm-test-command: ${{ github.event.inputs.npm-test-command }}
-          npm-build-command: ${{ github.event.inputs.npm-build-command }}
-          is-docker: ${{ github.event.inputs.is-docker-build }}
+          target: ${{ inputs.target }}
+          node-version: ${{ inputs.node-version }}
+          npm-install-command: ${{ inputs.npm-install-command }}
+          skip-test: ${{ inputs.skip-test }}
+          npm-test-command: ${{ inputs.npm-test-command }}
+          npm-build-command: ${{ inputs.npm-build-command }}
+          is-docker: ${{ inputs.is-docker-build }}
     outputs:
       app-name: ${{ steps.ci-init.outputs.app-name }}
       app-version: ${{ steps.ci-init.outputs.app-version }}
@@ -75,13 +75,13 @@ jobs:
       - name: Install dependencies, build & test
         uses: ./.github/actions/npm-ci
         with:
-          target: ${{ github.event.inputs.target }}
-          node-version: ${{ github.event.inputs.node-version }}
-          npm-install-command: ${{ github.event.inputs.npm-install-command }}
-          skip-test: ${{ github.event.inputs.skip-test }}
-          npm-test-command: ${{ github.event.inputs.npm-test-command }}
-          npm-build-command: ${{ github.event.inputs.npm-build-command }}
-          is-docker: ${{ github.event.inputs.is-docker-build }}
+          target: ${{ inputs.target }}
+          node-version: ${{ inputs.node-version }}
+          npm-install-command: ${{ inputs.npm-install-command }}
+          skip-test: ${{ inputs.skip-test }}
+          npm-test-command: ${{ inputs.npm-test-command }}
+          npm-build-command: ${{ inputs.npm-build-command }}
+          is-docker: ${{ inputs.is-docker-build }}
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5
         env:
@@ -106,17 +106,17 @@ jobs:
         run: |
           APP_NAME="${{ needs.build.outputs.app-name }}"
           APP_VERSION="${{ needs.build.outputs.app-version }}"
-          DOCKER_USERNAME="${{ github.event.secrets.DOCKER_USERNAME }}"
+          DOCKER_USERNAME="${{ secrets.DOCKER_USERNAME }}"
 
           echo "image-tag=${DOCKER_USERNAME}/${APP_NAME}:${APP_VERSION}" >> "$GITHUB_OUTPUT"
       - name: Build & Push Docker Image
         id: build-push-docker-image
-        working-directory: ${{ github.event.inputs.target }}
+        working-directory: ${{ inputs.target }}
         shell: bash
         run: |
           IMAGE_TAG="${{ steps.image-tag.outputs.image-tag }}"
           echo "Logging in to Docker Hub..."
-          echo "${{ github.event.secrets.DOCKER_PASSWORD }}" | docker login -u ${{ github.event.secrets.DOCKER_USERNAME }} --password-stdin >/dev/null 2>&1
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin >/dev/null 2>&1
 
           echo "Login to Docker Hub successful!"
 
@@ -136,5 +136,5 @@ jobs:
         run: |
           echo "✅ Docker image built and pushed successfully" >> "$GITHUB_STEP_SUMMARY"
           echo "📦 Image Tag: ${{ steps.tags.outputs.image-tag }}" >> "$GITHUB_STEP_SUMMARY"
-          echo "📦 Latest Tag: ${{ github.event.secrets.DOCKER_USERNAME }}/${{ needs.build.outputs.app-name }}:latest" >> "$GITHUB_STEP_SUMMARY"
+          echo "📦 Latest Tag: ${{ secrets.DOCKER_USERNAME }}/${{ needs.build.outputs.app-name }}:latest" >> "$GITHUB_STEP_SUMMARY"
 
