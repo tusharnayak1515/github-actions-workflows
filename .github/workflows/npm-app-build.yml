@@ -5,30 +5,37 @@ on:
     inputs:
       target:
         description: 'The target to build'
+        type: string
         required: true
         default: './'
       node-version:
         description: 'The Node.js version to use'
+        type: string
         required: true
         default: '22.xx'
       npm-install-command:
         description: 'The npm install command to run'
+        type: string
         required: true
         default: 'ci'
       skip-test:
         description: 'Whether to skip tests'
+        type: string
         required: false
         default: 'false'
       npm-test-command:
         description: 'The npm test command to run'
+        type: string
         required: false
         default: 'test'
       npm-build-command:
         description: 'The npm build command to run'
+        type: string
         required: true
         default: 'build'
       is-docker-build:
         description: 'Whether this build is for a Docker image'
+        type: string
         required: false
         default: 'true'
     secrets:
