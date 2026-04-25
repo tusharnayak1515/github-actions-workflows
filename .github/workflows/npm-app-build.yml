@@ -43,6 +43,10 @@ on:
         required: true
       DOCKER_PASSWORD:
         required: true
+      SONAR_TOKEN:
+        required: true
+      SONAR_HOST_URL:
+        required: true
 
 jobs:
   build:
