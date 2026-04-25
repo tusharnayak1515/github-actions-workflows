@@ -101,7 +101,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Determine image tags
-        id: image-tags
+        id: image-tag
         shell: bash
         run: |
           APP_NAME="${{ needs.build.outputs.app-name }}"
