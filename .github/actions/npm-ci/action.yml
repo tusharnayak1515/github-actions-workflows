@@ -52,13 +52,13 @@ runs:
       shell: bash
       working-directory: ${{ inputs.target }}
       run: |
-        npm ${{ inputs.npm-install-command || "ci" }}
+        npm ${{ inputs.npm-install-command || 'ci' }}
     - name: Build app
       if: ${{ inputs.is-docker == 'true' }}
       shell: bash
       working-directory: ${{ inputs.target }}
       run: |
-        npm run ${{ inputs.npm-build-command }}
+        npm run ${{ inputs.npm-build-command || 'build' }}
     - name: Test app
       if: ${{ inputs.skip-test == 'false' }}
       shell: bash
