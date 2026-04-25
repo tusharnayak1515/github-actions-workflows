@@ -135,6 +135,6 @@ jobs:
         shell: bash
         run: |
           echo "✅ Docker image built and pushed successfully" >> "$GITHUB_STEP_SUMMARY"
-          echo "📦 Image Tag: ${{ steps.tags.outputs.image-tag }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "📦 Image Tag: ${{ steps.image-tag.outputs.image-tag }}" >> "$GITHUB_STEP_SUMMARY"
           echo "📦 Latest Tag: ${{ secrets.DOCKER_USERNAME }}/${{ needs.build.outputs.app-name }}:latest" >> "$GITHUB_STEP_SUMMARY"
 
