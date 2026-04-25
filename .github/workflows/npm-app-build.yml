@@ -53,7 +53,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Install dependencies, build & test
         id: ci-init
-        uses: ./.github/actions/npm-ci
+        uses: tusharnayak1515/github-actions-workflows/.github/actions/npm-ci@master
         with:
           target: ${{ inputs.target }}
           node-version: ${{ inputs.node-version }}
@@ -73,7 +73,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
       - name: Install dependencies, build & test
-        uses: ./.github/actions/npm-ci
+        uses: tusharnayak1515/github-actions-workflows/.github/actions/npm-ci@master
         with:
           target: ${{ inputs.target }}
           node-version: ${{ inputs.node-version }}
