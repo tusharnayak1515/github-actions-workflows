@@ -67,6 +67,7 @@ jobs:
       app-version: ${{ steps.ci-init.outputs.app-version }}
   security:
     name: Security Scans
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
