@@ -1,0 +1,72 @@
+name: NPM CI Composite Action
+description: "Install dependencies, build & test"
+
+inputs:
+  target:
+    description: 'The target to build'
+    required: true
+    default: './'
+  node-version:
+    description: 'The Node.js version to use'
+    required: true
+    default: '22.xx'
+  npm-install-command:
+    description: 'The npm install command to run'
+    required: true
+    default: 'ci'
+  skip-test:
+    description: 'Whether to skip tests'
+    required: false
+    default: 'false'
+  npm-test-command:
+    description: 'The npm test command to run'
+    required: false
+    default: 'test'
+  npm-build-command:
+    description: 'The npm build command to run'
+    required: true
+    default: 'build'
+  is-docker:
+    description: 'Is docker enabled for the app'
+    required: true
+    default: 'true'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+    - name: Determine app name and version
+      id: app-details
+      working-directory: ${{ inputs.target }}
+      shell: bash
+      run: |
+        APP_NAME=$(node -p "require('./package.json').name")
+        APP_VERSION=$(node -p "require('./package.json').version")
+
+        echo "app-name=$APP_NAME" >> "$GITHUB_OUTPUT"
+        echo "app-version=$APP_VERSION" >> "$GITHUB_OUTPUT"
+    - name: Install dependencies
+      shell: bash
+      working-directory: ${{ inputs.target }}
+      run: |
+        npm ${{ inputs.npm-install-command || "ci" }}
+    - name: Build app
+      if: ${{ inputs.is-docker == 'true' }}
+      shell: bash
+      working-directory: ${{ inputs.target }}
+      run: |
+        npm run ${{ inputs.npm-build-command }}
+    - name: Test app
+      if: ${{ inputs.skip-test == 'false' }}
+      shell: bash
+      run: |
+        npm run ${{ inputs.npm-test-command || 'test' }}
+
+outputs:
+  app-name:
+    value: ${{ steps.app-details.outputs.app-name }}
+  app-version:
+    value: ${{ steps.app-details.outputs.app-version }}
