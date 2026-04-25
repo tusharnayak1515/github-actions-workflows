@@ -93,7 +93,7 @@ jobs:
   build-docker-image:
     name: Build & Push Docker image
     needs: [build,security]
-    if: needs.build.result == 'success' && needs.security.result == 'success' && vars.is-docker-build == 'true'
+    if: needs.build.result == 'success' && needs.security.result == 'success' && inputs.is-docker-build == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
