@@ -35,9 +35,9 @@ on:
         default: 'build'
       is-docker-build:
         description: 'Whether this build is for a Docker image'
-        type: boolean
+        type: string
         required: false
-        default: true
+        default: 'true'
       skip-sonar:
         description: 'Whether to run Sonar scan or not'
         type: string
@@ -103,7 +103,7 @@ jobs:
   build-docker-image:
     name: Build & Push Docker image
     needs: [build]
-    if: needs.build.result == 'success' && inputs.is-docker-build == true
+    if: needs.build.result == 'success' && inputs.is-docker-build == 'true'
     # if: needs.build.result == 'success' && needs.security.result == 'success' && inputs.is-docker-build == 'true'
     runs-on: ubuntu-latest
     steps:
