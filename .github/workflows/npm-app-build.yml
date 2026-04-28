@@ -72,6 +72,7 @@ jobs:
   security:
     name: Security Scans
     needs: [build]
+    if: inputs.skip-test != 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
