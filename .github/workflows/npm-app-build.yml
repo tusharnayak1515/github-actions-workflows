@@ -12,7 +12,7 @@ on:
         description: 'The Node.js version to use'
         type: string
         required: true
-        default: '22.xx'
+        default: '22.x'
       npm-install-command:
         description: 'The npm install command to run'
         type: string
