@@ -35,9 +35,9 @@ on:
         default: 'build'
       is-docker-build:
         description: 'Whether this build is for a Docker image'
-        type: string
+        type: boolean
         required: false
-        default: 'true'
+        default: true
       skip-sonar:
         description: 'Whether to run Sonar scan or not'
         type: string
