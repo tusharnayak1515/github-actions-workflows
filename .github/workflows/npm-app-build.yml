@@ -77,7 +77,7 @@ jobs:
   security:
     name: Security Scans
     needs: [build]
-    if: inputs.skip-sonar == 'false' && needs.skip-test == 'false'
+    if: inputs.skip-sonar == 'false' && inputs.skip-test == 'false'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
