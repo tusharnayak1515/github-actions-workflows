@@ -103,7 +103,7 @@ jobs:
   build-docker-image:
     name: Build & Push Docker image
     needs: [build]
-    if: ${{ needs.build.result == 'success' && inputs.is-docker-build == true }}
+    if: needs.build.result == 'success' && inputs.is-docker-build == true
     # if: needs.build.result == 'success' && needs.security.result == 'success' && inputs.is-docker-build == 'true'
     runs-on: ubuntu-latest
     steps:
