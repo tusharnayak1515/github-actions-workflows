@@ -153,8 +153,9 @@ jobs:
           format: table
           exit-code: 1
           ignore-unfixed: true
-          # severity: CRITICAL,HIGH
-          severity: CRITICAL
+          severity: CRITICAL,HIGH
+          # severity: CRITICAL
+          trivyignores: .trivyignore
 
       - name: Push Docker Image
         id: push-docker-image
