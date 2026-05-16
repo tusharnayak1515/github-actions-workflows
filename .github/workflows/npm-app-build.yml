@@ -110,6 +110,24 @@ jobs:
   #       with:
   #         args: >
   #           -Dsonar.branch.name=${{ github.ref_name }}
+  security:
+    name: Scan Repository For Secrets
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks Scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   build-docker-image:
     name: Build & Push Docker image
     # needs: [build, security]
