@@ -18,11 +18,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Greet User
+        id: greet
         shell: bash
         run: |
-          echo "Hello, ${{ inputs.name }}"
+          NAME=${{ inputs.name }}
+          echo "Hello, $NAME"
 
           touch .env
           echo "TOKEN=${{ secrets.TOKEN }}" >> .env
 
           echo "Stored the secret!"
+          size=${#NAME}
+          val="$NAME: $size"
+          echo "val=$val" >> "$GITHUB_OUTPUT"
+    outputs:
+      val: ${{ steps.greet.outputs.val }}
