@@ -1,0 +1,43 @@
+name: Setup Node and Install Dependencies
+description: "Setup Node and install dependencies"
+
+inputs:
+  source-directory:
+    description: 'Source directory'
+    required: true
+    default: '.'
+  node-version:
+    description: 'The Node.js version to use'
+    required: true
+    default: '22'
+  npm-install-command:
+    description: 'The npm install command to run'
+    required: true
+    default: 'ci'
+
+outputs:
+  artifact-name: ${{ steps.determine-artifact-name.outputs.artifact-name }}
+
+runs:
+  using: 'composite'
+  steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+      - name: Determine artifact name
+        id: determine-artifact-name
+        shell: bash
+        run: |
+          SRC=${{ inputs.source-directory }}
+          APP_NAME=$(node -p "require('${SRC}/package.json').name")
+          VERSION=$(node -p "require('${SRC}/package.json').version")
+          ARTIFACT_NAME="${APP_NAME}-${VERSION}"
+
+          echo "artifact-name=$ARTIFACT_NAME" >> "$GITHUB_OUTPUT"
+      - name: Install Dependencies
+        shell: bash
+        working-directory: ${{ inputs.source-directory }}
+        run: npm ${{ inputs.npm-install-command }}
