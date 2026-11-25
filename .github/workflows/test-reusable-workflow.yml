@@ -1,0 +1,28 @@
+name: Test Reusable Workflow
+
+on:
+  workflow_call:
+    inputs:
+      name:
+        type: string
+        description: "User Name"
+        default: "User"
+        required: true
+    secrets:
+      TOKEN:
+        required: true
+
+jobs:
+  greet:
+    name: Greet
+    runs-on: ubuntu-latest
+    steps:
+      - name: Greet User
+        shell: bash
+        run: |
+          echo "Hello, ${{ inputs.name }}"
+
+          touch .env
+          echo "TOKEN=${{ secrets.TOKEN }}" >> .env
+
+          echo "Stored the secret!"
