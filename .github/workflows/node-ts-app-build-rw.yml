@@ -1,0 +1,69 @@
+name: Build Node Ts App
+
+on: 
+  workflow_call:
+    inputs:
+      source-directory:
+        type: string
+        default: '.'
+        required: true
+      node-version:
+        type: string
+        default: '22'
+        required: true
+      npm-install-command:
+        type: string
+        default: 'ci'
+        required: true
+      npm-build-command:
+        type: string
+        default: 'build'
+        required: true
+      npm-test-command:
+        type: string
+        default: 'test'
+        required: true
+    outputs:
+      artifact-name:
+        description: "Artifact Name"
+        value: ${{ jobs.build.outputs.artifact-name }}
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Setup Node & Install dependencies
+        id: setup-install
+        uses: tusharnayak1515/github-actions-workflows/.github/actions/setup-install@master
+        with:
+          source-directory: ${{ inputs.source-directory }}
+          node-version: ${{ inputs.node-version }}
+          npm-install-command: ${{ inputs.npm-install-command }}
+      - name: Build App
+        shell: bash
+        working-directory: ${{ inputs.source-directory }}
+        run: npm run ${{ inputs.npm-build-command }}
+    outputs:
+      artifact-name: ${{ steps.setup-install.outputs.artifact-name }}
+  test:
+    name: Test
+    needs: [build]
+    if: ${{ always() && needs.build.result == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Setup Node & Install dependencies
+        id: setup-install
+        uses: tusharnayak1515/github-actions-workflows/.github/actions/setup-install@master
+        with:
+          source-directory: ${{ inputs.source-directory }}
+          node-version: ${{ inputs.node-version }}
+          npm-install-command: ${{ inputs.npm-install-command }}
+      - name: Test App
+        shell:  bash
+        working-directory: ${{ inputs.source-directory }}
+        run: npm run ${{ inputs.npm-test-command }}
