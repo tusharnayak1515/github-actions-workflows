@@ -21,7 +21,7 @@ jobs:
         id: greet
         shell: bash
         run: |
-          NAME=${{ inputs.name }}
+          NAME="${{ inputs.name }}"
           echo "Hello, $NAME"
 
           touch .env
