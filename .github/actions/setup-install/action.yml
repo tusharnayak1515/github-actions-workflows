@@ -16,7 +16,8 @@ inputs:
     default: 'ci'
 
 outputs:
-  artifact-name: ${{ steps.determine-artifact-name.outputs.artifact-name }}
+  artifact-name: 
+    value: ${{ steps.determine-artifact-name.outputs.artifact-name }}
 
 runs:
   using: 'composite'
@@ -27,6 +28,8 @@ runs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ inputs.node-version }}
+          cache: 'npm'
+          cache-dependency-path: ${{ inputs.source-directory }}/package-lock.json
       - name: Determine artifact name
         id: determine-artifact-name
         shell: bash
