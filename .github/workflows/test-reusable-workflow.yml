@@ -1,35 +1,30 @@
-name: Test Reusable Workflow
+name: Test Caller Workflow
 
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
       name:
         type: string
         description: "User Name"
         default: "User"
         required: true
-    secrets:
-      TOKEN:
-        required: true
 
 jobs:
-  greet:
-    name: Greet
+  caller-greet:
+    uses: tusharnayak1515/github-actions-workflows/.github/workflows/test-reusable-workflow.yml@master
+    with:
+      name: ${{ inputs.name }}
+    secrets:
+      TOKEN: ${{ secrets.TOKEN }}
+  read-output:
+    name: Read re-usable workflow output
+    needs: [caller-greet]
+    if: ${{ always() && needs.caller-greet.result == 'success' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Greet User
-        id: greet
+      - name: Read output
         shell: bash
+        env:
+          RW_OUTPUT: ${{ needs.caller-greet.outputs.val || 'Failed to fetch output' }}
         run: |
-          NAME="${{ inputs.name }}"
-          echo "Hello, $NAME"
-
-          touch .env
-          echo "TOKEN=${{ secrets.TOKEN }}" >> .env
-
-          echo "Stored the secret!"
-          SIZE=${#NAME}
-          VAL="$NAME: $SIZE"
-          echo "val=$VAL" >> "$GITHUB_OUTPUT"
-    outputs:
-      val: ${{ steps.greet.outputs.val }}
+          echo "$RW_OUTPUT"
