@@ -11,6 +11,10 @@ on:
     secrets:
       TOKEN:
         required: true
+    outputs:
+      val:
+        description: "Greeting and name length"
+        value: ${{ jobs.greet.outputs.val }}
 
 jobs:
   greet:
