@@ -4,8 +4,9 @@ on:
   workflow_call:
     inputs:
       environment:
-        type: environment
+        description: 'Target GitHub environment (e.g., staging, production)'
         required: true
+        type: string
 
 jobs:
   deploy:
