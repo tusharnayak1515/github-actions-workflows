@@ -19,6 +19,6 @@ jobs:
         run: |
           echo "Deploying app in ${{ inputs.environment }}..."
           sleep 5s
-          echo "${{ vars.message || vars.MESSAGE }}"
+          echo "${{ vars.message }}"
           sleep 5s
           echo "Deployment successful in ${{ inputs.environment }}!"
