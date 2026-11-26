@@ -39,7 +39,7 @@ jobs:
   rollback:
     name: Rollback
     needs: [deploy,validate]
-    if: ${{ always() && needs.validate.result == 'failed' && !cancelled() }}
+    if: ${{ failure() }}
     runs-on: ubuntu-latest
     steps:
       - name: Rollback
